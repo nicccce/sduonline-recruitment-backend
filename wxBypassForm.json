@@ -1,0 +1,42 @@
+{
+  "bypass": [
+    {
+      "key": "intro",
+      "text": "个人简介"
+    }
+  ],
+  "normal": [
+    {
+      "key": "real_name",
+      "text": "真实姓名"
+    },
+    {
+      "key": "student_id",
+      "text": "学号"
+    },
+    {
+      "key": "school",
+      "text": "学院"
+    },
+    {
+      "key": "faculty",
+      "text": "专业"
+    },
+    {
+      "key": "qq",
+      "text": "QQ号"
+    },
+    {
+      "key": "wechat",
+      "text": "微信号"
+    },
+    {
+      "key": "phone",
+      "text": "中国大陆手机号"
+    },
+    {
+      "key": "intro",
+      "text": "个人简介"
+    }
+  ]
+}

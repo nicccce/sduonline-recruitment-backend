@@ -1,0 +1,5 @@
+dsn: root:root@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
+jwtSecret: "143ba327-0c5b-4cc9-b30c-33452c461c24"
+port: 3005
+wxAppID:
+wxAppSecret:
