@@ -18,7 +18,7 @@ func main() {
 	engine.Use(gin.Logger())
 	engine.Use(nice.Recovery(func(c *gin.Context, err interface{}) {
 		aw := app.NewWrapper(c)
-		aw.Error("内部错误，请重试：" + fmt.Sprintf("%v", err))
+		aw.Error("Internal error, please try again: " + fmt.Sprintf("%v", err))
 	}))
 	engine.Use(middleware.Cors())
 	conf.Setup()
