@@ -3,13 +3,23 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"sduonline-recruitment/middleware"
+	"sduonline-recruitment/model"
+	"sduonline-recruitment/pkg/app"
 	"sduonline-recruitment/service"
 )
 
 func Setup(engine *gin.Engine) {
-	engine.GET("/panic", func(c *gin.Context) {
-		panic("test panic")
-	})
+	test := engine.Group("/test")
+	{
+		test.GET("/panic", func(c *gin.Context) {
+			panic("test panic")
+		})
+		test.GET("/database_initialization", func(c *gin.Context) {
+			aw := app.NewWrapper(c)
+			model.Database_initialization()
+			aw.Success("success!")
+		})
+	}
 	// 用户
 	user := engine.Group("/user")
 	{
