@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"sduonline-recruitment/pkg/conf"
@@ -21,7 +22,37 @@ func Setup() {
 }
 
 func Database_initialization() error {
+	sqlDB, err := DB.DB()
+	rows, err := sqlDB.Query("SHOW TABLES")
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	// 删除所有表
+	for rows.Next() {
+		var tableName string
+		err := rows.Scan(&tableName)
+		if err != nil {
+			fmt.Println("Error scanning table name:", err)
+			continue
+		}
+
+		result := DB.Exec("DROP TABLE IF EXISTS " + tableName)
+		if result.Error != nil {
+			return result.Error
+		}
+	}
+
 	if err := DB.AutoMigrate(&User{}); err != nil {
+		return err
+	}
+
+	if err := DB.AutoMigrate(&SectionPermission{}); err != nil {
+		return err
+	}
+
+	if err := DB.AutoMigrate(&WebLogin{}); err != nil {
 		return err
 	}
 
@@ -42,6 +73,10 @@ func Database_initialization() error {
 	}
 
 	if err := DB.AutoMigrate(&Section{}); err != nil {
+		return err
+	}
+
+	if err := DB.AutoMigrate(&Config{}); err != nil {
 		return err
 	}
 
