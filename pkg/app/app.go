@@ -18,14 +18,14 @@ func NewWrapper(c *gin.Context) *Wrapper {
 func (w Wrapper) OK() {
 	w.Ctx.JSON(200, Result{
 		Code: 0,
-		Msg:  "",
+		Msg:  "ok",
 		Data: nil,
 	})
 }
 func (w Wrapper) Success(data interface{}) {
 	w.Ctx.JSON(200, Result{
 		Code: 0,
-		Msg:  "",
+		Msg:  "success",
 		Data: data,
 	})
 }

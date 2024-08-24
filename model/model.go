@@ -20,28 +20,30 @@ func Setup() {
 	DB = dbInternal
 }
 
-func Database_initialization() {
+func Database_initialization() error {
 	if err := DB.AutoMigrate(&User{}); err != nil {
-		panic(err)
+		return err
 	}
 
 	if err := DB.AutoMigrate(&Question{}); err != nil {
-		panic(err)
+		return err
 	}
 
 	if err := DB.AutoMigrate(&Answer{}); err != nil {
-		panic(err)
+		return err
 	}
 
 	if err := DB.AutoMigrate(&Application{}); err != nil {
-		panic(err)
+		return err
 	}
 
 	if err := DB.AutoMigrate(&Department{}); err != nil {
-		panic(err)
+		return err
 	}
 
 	if err := DB.AutoMigrate(&Section{}); err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
