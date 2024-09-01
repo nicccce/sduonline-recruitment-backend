@@ -9,7 +9,7 @@ import (
 )
 
 func Setup(engine *gin.Engine) {
-	// 测试 上线后删掉
+	// 测试 上线后注释掉
 	test := engine.Group("/test")
 	{
 		//测试panic
@@ -71,6 +71,14 @@ func Setup(engine *gin.Engine) {
 		depSec.POST("/edit_section_question", middleware.SectionPermission(), hub.EditQuestion)
 		// 删除一个部门问题
 		depSec.POST("/delete_section_question", middleware.SectionPermission(), hub.DeleteQuestion)
+		// 列出部门的所有面试
+		depSec.GET("/interview", middleware.SectionPermission(), hub.ListInterviews)
+		// 添加一个部门面试
+		depSec.POST("/add_interview", middleware.SectionPermission(), hub.AddInterview)
+		// 编辑一个部门面试
+		depSec.POST("/edit_interview", middleware.SectionPermission(), hub.EditInterview)
+		// 删除一个部门面试
+		depSec.POST("/delete_interview", middleware.SectionPermission(), hub.DeleteInterview)
 	}
 	depSec.Use(middleware.JWT(4))
 	{

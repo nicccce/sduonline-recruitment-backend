@@ -151,3 +151,55 @@ func (receiver DepSecService) DeleteQuestion(c *gin.Context) {
 	qnsAnsModel.DeleteQuestionByOptionalSectionID(qnsID, sectionID)
 	aw.OK()
 }
+func (receiver DepSecService) AddInterview(c *gin.Context) {
+	aw := app.NewWrapper(c)
+	var req model.InterviewDTO
+	if err := c.ShouldBind(&req); err != nil {
+		aw.Error(err.Error())
+		return
+	}
+	var sectionID *int
+	sid := util.ExtractSectionID(c)
+	sectionID = &sid
+	interview := interviewModel.CreateInterview(req, sectionID)
+	aw.Success(interview)
+}
+func (receiver DepSecService) EditInterview(c *gin.Context) {
+	aw := app.NewWrapper(c)
+	var req model.InterviewDTO
+	if err := c.ShouldBind(&req); err != nil {
+		aw.Error(err.Error())
+		return
+	}
+	id, err := strconv.Atoi(c.PostForm("id"))
+	if err != nil {
+		aw.Error(err.Error())
+		return
+	}
+	var sectionID *int
+	sid := util.ExtractSectionID(c)
+	sectionID = &sid
+	interview := interviewModel.UpdateInterview(req, id, sectionID)
+	aw.Success(interview)
+}
+func (receiver DepSecService) DeleteInterview(c *gin.Context) {
+	aw := app.NewWrapper(c)
+	id, err := strconv.Atoi(c.PostForm("id"))
+	if err != nil {
+		aw.Error(err.Error())
+		return
+	}
+	var sectionID *int
+	sid := util.ExtractSectionID(c)
+	sectionID = &sid
+	interviewModel.DeleteInterview(id, sectionID)
+	aw.OK()
+}
+func (receiver DepSecService) ListInterviews(c *gin.Context) {
+	aw := app.NewWrapper(c)
+	var sectionID *int
+	sid := util.ExtractSectionID(c)
+	sectionID = &sid
+	interviews := interviewModel.FindInterviewsBySectionID(sectionID)
+	aw.Success(interviews)
+}
