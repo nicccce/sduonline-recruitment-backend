@@ -8,6 +8,7 @@ var aplModel model.AplModel
 var qnsAnsModel model.QnsAnsModel
 var configModel model.ConfigModel
 var interviewModel model.InterviewModel
+var scoreModel model.ScoreModel
 
 func Setup() {
 	userModel = model.UserModel{AbstractModel: model.AbstractModel{Tx: model.DB}}
@@ -16,4 +17,5 @@ func Setup() {
 	qnsAnsModel = model.QnsAnsModel{AbstractModel: model.AbstractModel{Tx: model.DB}}
 	configModel = model.ConfigModel{AbstractModel: model.AbstractModel{Tx: model.DB}}
 	interviewModel = model.InterviewModel{AbstractModel: model.AbstractModel{Tx: model.DB}}
+	scoreModel = model.ScoreModel{AbstractModel: model.AbstractModel{Tx: model.DB}}
 }

@@ -20,10 +20,21 @@ type Application struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 type ApplicationJudge struct {
-	Status     int    `json:"status" form:"status" binding:"gte=0,lte=2"`
-	Score      int    `json:"score" form:"score" binding:"gte=-1,lte=100"`
-	ScoreExtra int    `json:"score_extra" form:"score_extra" binding:"gte=-1,lte=100"`
-	Note       string `json:"note" form:"note"`
+	Status int    `json:"status" form:"status" binding:"gte=0,lte=2"`
+	Note   string `json:"note" form:"note"`
+}
+type ApplicationJudgeVO struct {
+	Status int    `json:"status" form:"status" binding:"gte=0,lte=2"`
+	Score  []int  `json:"score" form:"score" gorm:"-"`
+	Note   string `json:"note" form:"note"`
+}
+type ApplicationVO struct {
+	ID        int `json:"id"`
+	UserID    int `json:"user_id"`
+	SectionID int `json:"section_id"`
+	ApplicationJudgeVO
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (receiver AplModel) UpdateUserApl(userID int, sectionID []int) []Application {
@@ -35,7 +46,7 @@ func (receiver AplModel) UpdateUserApl(userID int, sectionID []int) []Applicatio
 		applications = append(applications, Application{
 			UserID:           userID,
 			SectionID:        id,
-			ApplicationJudge: ApplicationJudge{Score: -1, ScoreExtra: -1},
+			ApplicationJudge: ApplicationJudge{},
 		})
 	}
 	err = tx.Create(&applications).Error
@@ -56,7 +67,7 @@ type AplListVO struct {
 	Qq          string `json:"qq"`
 	Phone       string `json:"phone"`
 	SectionName string `json:"section_name"`
-	Application
+	ApplicationVO
 }
 
 func getAplListSQL(where string) string {
@@ -122,6 +133,14 @@ func (receiver AplModel) FindAplAnswersBySectionIDAplID(sectionID int, aplID int
 	return vo
 }
 func (receiver AplModel) UpdateAplJudgeByIDSectionID(judge *ApplicationJudge, id int, sectionID int) {
-	receiver.Tx.Exec("update applications set status=?,score=?,score_extra=?,note=?,updated_at=? where id=? and section_id=?",
-		judge.Status, judge.Score, judge.ScoreExtra, judge.Note, time.Now(), id, sectionID)
+	receiver.Tx.Exec("update applications set status=?,note=?,updated_at=? where id=? and section_id=?",
+		judge.Status, judge.Note, time.Now(), id, sectionID)
+}
+func (receiver AplModel) GetUserIDByAplID(aplID int) (int, error) {
+	var apl Application
+	err := receiver.Tx.Take(&apl, aplID).Error
+	if err != nil {
+		return 0, err
+	}
+	return apl.UserID, nil
 }

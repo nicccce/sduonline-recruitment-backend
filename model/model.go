@@ -3,6 +3,7 @@ package model
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"sduonline-recruitment/pkg/conf"
 )
 
@@ -13,7 +14,9 @@ type AbstractModel struct {
 }
 
 func Setup() {
-	dbInternal, err := gorm.Open(mysql.Open(conf.Conf.Dsn), &gorm.Config{})
+	dbInternal, err := gorm.Open(mysql.Open(conf.Conf.Dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		panic(err)
 	}
@@ -21,7 +24,7 @@ func Setup() {
 }
 
 func Database_initialization() error {
-	if err := DB.AutoMigrate(&Interview{}); err != nil {
+	if err := DB.AutoMigrate(&Score{}); err != nil {
 		return err
 	}
 	/*sqlDB, err := DB.DB()
@@ -79,6 +82,10 @@ func Database_initialization() error {
 	}
 
 	if err := DB.AutoMigrate(&Config{}); err != nil {
+		return err
+	}
+
+	if err := DB.AutoMigrate(&Interview{}); err != nil {
 		return err
 	}*/
 
