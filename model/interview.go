@@ -26,7 +26,7 @@ func (receiver InterviewModel) CreateInterview(interviewDTO InterviewDTO, sectio
 		Name:      interviewDTO.Name,
 		Weight:    null.NewInt(int64(interviewDTO.Weight), true),
 	}
-	receiver.Tx.Create(interview)
+	receiver.Tx.Create(&interview)
 	return interview
 }
 func (receiver InterviewModel) UpdateInterview(interviewDTO InterviewDTO, id int, sectionID *int) Interview {
@@ -36,17 +36,20 @@ func (receiver InterviewModel) UpdateInterview(interviewDTO InterviewDTO, id int
 		Name:      interviewDTO.Name,
 		Weight:    null.NewInt(int64(interviewDTO.Weight), true),
 	}
-	err := receiver.Tx.Save(interview).Error
+	err := receiver.Tx.Save(&interview).Error
 	util.ForwardOrPanic(err)
 	return interview
 }
 func (receiver InterviewModel) DeleteInterview(id int, sectionID *int) {
-	err := receiver.Tx.Exec("DELETE FROM interview WHERE id=? AND section_id=?", id, *sectionID).Error
+	err := receiver.Tx.Exec("DELETE FROM scores WHERE interview_id=?", id).Error
 	util.ForwardOrPanic(err)
+	err = receiver.Tx.Exec("DELETE FROM interviews WHERE id=? AND section_id=?", id, *sectionID).Error
+	util.ForwardOrPanic(err)
+
 }
 func (receiver InterviewModel) FindInterviewsBySectionID(sectionID *int) []Interview {
 	var interviews []Interview
-	err := receiver.Tx.Find(&interviews, "section_id=?", *sectionID).Error
+	err := receiver.Tx.Order("id ASC").Find(&interviews, "section_id=?", *sectionID).Error
 	util.ForwardOrPanic(err)
 	return interviews
 }
