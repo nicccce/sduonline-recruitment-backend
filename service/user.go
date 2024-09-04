@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"html"
 	"os"
+	"path/filepath"
 	"sduonline-recruitment/model"
 	"sduonline-recruitment/pkg/app"
 	"sduonline-recruitment/pkg/conf"
@@ -164,4 +165,38 @@ func (receiver UserService) WebLogin(c *gin.Context) {
 	} else {
 		aw.Error("授权码不存在或已过期")
 	}
+}
+
+// UploadFileService 处理文件上传的服务
+type UploadFileService struct {
+	UploadDir string // 上传文件存储的目录
+}
+
+// NewUploadFileService 创建一个新的 UploadFileService
+func (receiver UserService) NewUploadFileService(uploadDir string) *UploadFileService {
+	return &UploadFileService{
+		UploadDir: uploadDir,
+	}
+}
+
+func (receiver UserService) UploadAvatar(c *gin.Context) {
+	aw := app.NewWrapper(c)
+	// 获取文件
+	file, err := c.FormFile("avatar")
+	if err != nil {
+		aw.Error(err.Error())
+		return
+	}
+
+	// 获取用户ID
+	uc := util.ExtractUserClaims(c)
+	userID := uc.UserID
+
+	// 生成保存路径
+	filePath := filepath.Join("/avatar", strconv.Itoa(userID)+".png")
+	if err := util.SaveUploadedFile(file, filePath); err != nil {
+		aw.Error(err.Error())
+		return
+	}
+	aw.OK()
 }

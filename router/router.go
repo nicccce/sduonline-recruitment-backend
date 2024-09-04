@@ -47,6 +47,8 @@ func Setup(engine *gin.Engine) {
 		user.GET("/get_update_info_form", hub.GetUpdateInfoForm)
 		// 获取网页登录授权码，授权码有效期五分钟
 		user.POST("/generate_web_login", hub.GenerateWebLogin)
+		// 更新用户头像
+		user.POST("/upload_avatar", hub.UploadAvatar)
 	}
 
 	// 事业群-部门
