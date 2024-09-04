@@ -3,3 +3,4 @@ jwtSecret: "143ba327-0c5b-4cc9-b30c-33452c461c24"
 port: 3005
 wxAppID:
 wxAppSecret:
+uploadDir:

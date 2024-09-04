@@ -3,17 +3,18 @@ module sduonline-recruitment
 go 1.17
 
 require (
+	github.com/ekyoung/gin-nice-recovery v0.0.0-20160510022553-1654dca486db
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/tealeg/xlsx/v3 v3.2.0
+	gopkg.in/guregu/null.v3 v3.5.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.3.5
 	gorm.io/gorm v1.23.8
 )
 
 require (
-	github.com/ekyoung/gin-nice-recovery v0.0.0-20160510022553-1654dca486db // indirect
 	github.com/frankban/quicktest v1.5.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-errors/errors v1.4.2 // indirect
@@ -45,6 +46,5 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
-	gopkg.in/guregu/null.v3 v3.5.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
