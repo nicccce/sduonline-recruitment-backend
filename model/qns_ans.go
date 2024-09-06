@@ -102,8 +102,8 @@ func (q QnsAnsModel) FindQuestionsAnswersByUserID(userID int) []qnsAnsVO {
 		"from answers a "+
 		"left join questions q on q.id=a.question_id "+
 		"left join sections s on q.section_id=s.id "+
-		"where a.user_id=? and s.id in " +
-		"(select section_id from applications where user_id=a.user_id)", userID).Find(&vo).Error
+		"where a.user_id=? and"+
+		"(s.id IN (SELECT section_id FROM applications WHERE user_id = a.user_id) OR s.id IS NULL OR s.id = 0)", userID).Find(&vo).Error
 	util.ForwardOrPanic(err)
 	return vo
 }
