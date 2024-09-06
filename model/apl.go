@@ -3,6 +3,7 @@ package model
 import (
 	"gorm.io/gorm"
 	"sduonline-recruitment/pkg/util"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -58,6 +59,9 @@ func (receiver AplModel) FindAplsByUserID(userID int) []AplListVO {
 	var apl []AplListVO
 	err := receiver.Tx.Raw(getAplListSQL("where a.user_id=?"), userID).Find(&apl).Error
 	util.ForwardOrPanic(err)
+	sort.Slice(apl, func(i, j int) bool {
+		return apl[i].ID < apl[j].ID
+	})
 	return apl
 }
 

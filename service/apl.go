@@ -22,19 +22,31 @@ func (receiver AplService) SubmitApl(c *gin.Context) {
 		aw.Error("请先完善个人信息")
 		return
 	}
+	type sectionReq struct {
+		SectionID int `form:"section_id" json:"section_id" binding:"required"`
+		Order     int `form:"order" json:"order" binding:"required"`
+	}
 	type Req struct {
-		SectionID []int `form:"section_id[]" binding:"required,gte=1,lte=2"`
+		Section []sectionReq `form:"section[]" json:"section" binding:"required,gte=1,lte=2"`
 	}
 	var req Req
 	if err := c.ShouldBind(&req); err != nil {
 		aw.Error(err.Error())
 		return
 	}
-	if !depSecModel.ExistSectionsByID(req.SectionID) {
+	sectionIDs := make([]int, len(req.Section))
+	for _, section := range req.Section {
+		if section.Order <= 2 && section.Order >= 1 {
+			sectionIDs[section.Order-1] = section.SectionID
+		} else {
+			aw.Error("非法志愿")
+		}
+	}
+	if !depSecModel.ExistSectionsByID(sectionIDs) {
 		aw.Error("部门ID不存在或重复")
 		return
 	}
-	applications := aplModel.UpdateUserApl(uc.UserID, req.SectionID)
+	applications := aplModel.UpdateUserApl(uc.UserID, sectionIDs)
 	applicationsVO, err := receiver.fillInScoresToApplications(&applications)
 	if err != nil {
 		aw.Error(err.Error())
