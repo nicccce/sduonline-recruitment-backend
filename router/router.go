@@ -58,6 +58,12 @@ func Setup(engine *gin.Engine) {
 		// 获取各部门介绍
 		depSec.GET("/intro", hub.Intro)
 	}
+	depSec.Use(middleware.JWT(2))
+	{
+		hub := service.DepSecService{}
+		// 列出部门的所有面试
+		depSec.GET("/interview", middleware.SectionPermission(), hub.ListInterviews)
+	}
 	depSec.Use(middleware.JWT(3))
 	{
 		hub := service.DepSecService{}
@@ -71,8 +77,6 @@ func Setup(engine *gin.Engine) {
 		depSec.POST("/edit_section_question", middleware.SectionPermission(), hub.EditQuestion)
 		// 删除一个部门问题
 		depSec.POST("/delete_section_question", middleware.SectionPermission(), hub.DeleteQuestion)
-		// 列出部门的所有面试
-		depSec.GET("/interview", middleware.SectionPermission(), hub.ListInterviews)
 		// 添加一个部门面试
 		depSec.POST("/add_interview", middleware.SectionPermission(), hub.AddInterview)
 		// 编辑一个部门面试
